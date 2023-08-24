@@ -29,6 +29,12 @@ pipeline {
         }
       }
     }
+    stage("Quality Gate"){
+          timeout(time: 1, unit: 'HOURS') {
+              waitForQualityGate abortPipeline: true
+  
+          }
+    }
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "avivv/ultimate-cicd:${BUILD_NUMBER}"
