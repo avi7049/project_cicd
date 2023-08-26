@@ -3,6 +3,9 @@ def COLOR_MAP = [
     'FAILURE': 'danger',
 ]
 pipeline {
+  environment {
+    PATH = "/usr/local/bin:${env./usr/bin/wget}"
+  }
   agent {
     docker {
       image 'abhishekf5/maven-abhishek-docker-agent:v1'
@@ -22,9 +25,6 @@ pipeline {
             sh 'docker run gesellix/trufflehog --json https://github.com/avi7049/project_cicd.git > trufflehog'
             sh 'cat trufflehog'
         }
-    }
-    environment {
-        PATH = "/usr/local/bin:${env./usr/bin/wget}"
     }
     stage ('Source Composition Analysis') {
         steps {
