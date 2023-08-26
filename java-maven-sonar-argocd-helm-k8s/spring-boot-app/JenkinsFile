@@ -3,9 +3,6 @@ def COLOR_MAP = [
     'FAILURE': 'danger',
 ]
 pipeline {
-  environment {
-    PATH = "/usr/local/bin:${env./usr/bin/wget}"
-  }
   agent {
     docker {
       image 'abhishekf5/maven-abhishek-docker-agent:v1'
