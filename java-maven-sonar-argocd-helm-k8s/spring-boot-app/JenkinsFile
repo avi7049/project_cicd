@@ -16,6 +16,14 @@ pipeline {
         //git branch: 'main', url: 'https://github.com/avi7049/project_cicd.git'
       }
     }
+    stage ('Check git Secrets'){
+        steps {
+            sh 'rm trufflehog || true'
+            sh 'docker run gesellix/trufflehog --json https://github.com/avi7049/project_cicd.git > trufflehog'
+            sh 'cat trufflehog'
+        }
+    }
+
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
