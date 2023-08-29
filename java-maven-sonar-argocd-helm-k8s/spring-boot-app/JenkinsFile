@@ -7,7 +7,7 @@ pipeline {
     docker {
       image 'abhishekf5/maven-abhishek-docker-agent:v1'
       args '--user root -v /var/run/docker.sock:/var/run/docker.sock' // mount Docker socket to access the host's Docker daemon
-    }
+    } 
   }
   stages {
     stage('Checkout') {
@@ -16,6 +16,24 @@ pipeline {
         //git branch: 'main', url: 'https://github.com/avi7049/project_cicd.git'
       }
     }
+    stage ('Check git Secrets'){
+        steps {
+            sh 'rm trufflehog || true'
+            sh 'docker run gesellix/trufflehog --json https://github.com/avi7049/project_cicd.git > trufflehog'
+            sh 'cat trufflehog'
+        }
+    }
+    stage ('Source Composition Analysis') {
+        steps {
+            //dependencyCheck additionalArguments: '', odcInstallation: 'DP-check' 
+            //dependencyCheckPublisher pattern: '**/depenency-check-report.xml'
+            sh 'rm owasp* || true'
+            sh 'curl -O "https://raw.githubusercontent.com/avi7049/project_cicd/main/java-maven-sonar-argocd-helm-k8s/spring-boot-app/owasp-dependency-check.sh"'
+            sh 'chmod +x owasp-dependency-check.sh'
+            sh 'bash owasp-dependency-check.sh'
+        }
+    }
+    
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
