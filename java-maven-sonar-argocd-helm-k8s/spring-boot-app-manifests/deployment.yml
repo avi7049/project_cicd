@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: spring-boot-app
-        image: avivv/ultimate-cicd:1
+        image: avivv/ultimate-cicd:3
         ports:
         - containerPort: 8080
